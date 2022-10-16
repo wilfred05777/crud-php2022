@@ -23,7 +23,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 <div class="contianer">
 
 
-<form>
+<form action="" method="post">
     <div class="mb-3">
         <label >Product Image</label>
         <input type="file" class="form-control" >
