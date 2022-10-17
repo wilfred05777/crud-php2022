@@ -24,6 +24,10 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $errors = [];
 
+$title = '';
+$price = '';
+$description = '';
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
 
@@ -55,17 +59,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     ///  name parameter feature in pdo e.g :title, :image, :description, :price, :date
     ///
 
-    $statement = $pdo->prepare("
-        INSERT INTO products (title, image, description, price, create_date)
-        VALUES (:title, :image, :description, :price, :date)
-    ");
+        //// if there is no error save in the database
+    if(empty($errors)){
+        $statement = $pdo->prepare("
+            INSERT INTO products (title, image, description, price, create_date)
+            VALUES (:title, :image, :description, :price, :date)
+        ");
 
-    $statement->bindValue(':title', $title);
-    $statement->bindValue(':image', '');
-    $statement->bindValue(':description', $description);
-    $statement->bindValue(':price', $price);
-    $statement->bindValue(':date', $date);
-    $statement->execute();
+        $statement->bindValue(':title', $title);
+        $statement->bindValue(':image', '');
+        $statement->bindValue(':description', $description);
+        $statement->bindValue(':price', $price);
+        $statement->bindValue(':date', $date);
+        $statement->execute();
+    }
 }
 ?>
 
@@ -101,17 +108,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     </div>
     <div class="mb-3">
         <label >Product Title</label>
-        <input type="text" name="title" class="form-control" >
-
+        <input type="text" name="title" class="form-control" value="<?php echo $title?>">
     </div>
     <div class="mb-3">
-        <label >Product Description</label>
-        <textarea name="description" class="form-control" ></textarea>
-
+        <label >Product Description</label><textarea name="description" class="form-control"><?php echo $description; ?></textarea>
     </div>
     <div class="mb-3">
         <label >Product Price</label>
-        <input type="number" name="price" step=".01" class="form-control" >
+        <input type="number" name="price" step=".01" class="form-control" value="<?php echo $price?> ">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
