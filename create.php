@@ -24,6 +24,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $errors = [];
 
+//// purpose is to get the input when other inputs are wrong and start over again it will still be there e.g input values: $price, $description, $title (in the form management)
 $title = '';
 $price = '';
 $description = '';
