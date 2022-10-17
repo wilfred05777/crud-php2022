@@ -20,7 +20,9 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 //echo '</pre>';
 //exit;
 
-echo $_SERVER['REQUEST_METHOD']."<br>";
+//echo $_SERVER['REQUEST_METHOD']."<br>";
+
+$errors = [];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -29,6 +31,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $description = $_POST['description'];
     $price = $_POST['price'];
     $date = date('Y-m-d H:i:s');
+
+//    $errors = [];
+
+
+        /// check if the input title is an empty it will show a validation
+        if(!$title) {
+            $errors[] = "Product title is required";
+        }
+        if(!$price){
+            $errors[] = "Price is required";
+        }
 
     //// this is an unsafe approach
     //$pdo->exec("
@@ -67,9 +80,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<h1>Prducts CRUD</h1>
+<h1>Create new Product</h1>
 <div class="contianer">
 
+    <?php  if(!empty($errors)):  ?>
+        <div class="alert alert-danger">
+            <?php foreach ($errors as $error): ?>
+                <div>
+                    <?php echo $error ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 
 <form action="" method="post">
     <div class="mb-3">
