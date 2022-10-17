@@ -5,7 +5,55 @@
 $pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud','root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+//?image=&title=&description=&price=
 
+//echo '<pre>';
+//    var_dump($_GET);
+//echo '</pre>';
+
+//echo '<pre>';
+//    var_dump($_POST);
+//echo '</pre>';
+
+//echo '<pre>';
+//    var_dump($_SERVER);
+//echo '</pre>';
+//exit;
+
+echo $_SERVER['REQUEST_METHOD']."<br>";
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
+    $date = date('Y-m-d H:i:s');
+
+    //// this is an unsafe approach
+    //$pdo->exec("
+    //    INSERT INTO products (title, image, description, price, create_date)
+    //    VALUES ('$title', '', '$description', $price, '$date')
+    //");
+
+
+    /// note:
+    ///  1:
+    ///  name parameter feature in pdo e.g :title, :image, :description, :price, :date
+    ///
+
+    $statement = $pdo->prepare("
+        INSERT INTO products (title, image, description, price, create_date)
+        VALUES (:title, :image, :description, :price, :date)
+    ");
+
+    $statement->bindValue(':title', $title);
+    $statement->bindValue(':image', '');
+    $statement->bindValue(':description', $description);
+    $statement->bindValue(':price', $price);
+    $statement->bindValue(':date', $date);
+    $statement->execute();
+}
 ?>
 
 <!doctype html>
@@ -26,22 +74,22 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 <form action="" method="post">
     <div class="mb-3">
         <label >Product Image</label>
-        <input type="file" class="form-control" >
+        <input type="file" name="image" class="form-control" >
 
     </div>
     <div class="mb-3">
         <label >Product Title</label>
-        <input type="text" class="form-control" >
+        <input type="text" name="title" class="form-control" >
 
     </div>
     <div class="mb-3">
         <label >Product Description</label>
-        <textarea  class="form-control" ></textarea>
+        <textarea name="description" class="form-control" ></textarea>
 
     </div>
     <div class="mb-3">
         <label >Product Price</label>
-        <input type="number" step=".01" class="form-control" >
+        <input type="number" name="price" step=".01" class="form-control" >
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
